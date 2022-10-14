@@ -55,6 +55,7 @@ class Game extends React.Component {
             }],
             xIsNext: true,
             stepNumber: 0,
+            lastMove: null,
         };
     }
 
@@ -62,15 +63,16 @@ class Game extends React.Component {
         // Throw future "history" away if move made while looking at past board
         // Creating copies of these arrays instead of mutating them to maintain immutability for react
         const history = this.state.history.slice(0, this.state.stepNumber + 1); 
-        const current = history[history.length - 1];
-        const squares = current.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
+        // Get current state of the board
+        const curSquares = history[history.length - 1].squares.slice();
+        if (calculateWinner(curSquares) || curSquares[i]) {
             return;
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        curSquares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             history: history.concat([{
-                squares: squares,
+                squares: curSquares,
+                lastMove: i,
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -90,13 +92,15 @@ class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((_step, move) => {
-            const desc = move ?
-                'Go to move #' + move :
+        const moves = history.map((step, moveIndex) => {
+            const moveCol = (step.lastMove % 3) + 1;
+            const moveRow = (Math.floor(step.lastMove / 3)) + 1;
+            const desc = moveIndex ?
+                'Go to move #' + moveIndex + ' at [' + moveCol + ']' + '['  + moveRow +']':
                 'Go to game start';
             return (
-                <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                <li key={moveIndex}>
+                    <button onClick={() => this.jumpTo(moveIndex)}>{desc}</button>
                 </li>
             );
         })
