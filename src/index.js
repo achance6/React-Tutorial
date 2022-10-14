@@ -12,7 +12,7 @@ function Square(props) {
 }
 
   
-  class Board extends React.Component {
+class Board extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -43,55 +43,62 @@ function Square(props) {
     }
   
     render() {
-      const winner = calculateWinner(this.state.squares)
-      let status;
-      if (winner) {
-          status = 'Winner = ' + winner;
-      }
-      else {
-          status = 'Next player ' + (this.state.xIsNext ? 'X' : 'O');
-      }
+        const winner = calculateWinner(this.state.squares)
+        let status;
+        if (winner) {
+            status = 'Winner = ' + winner;
+        }
+        else {
+            status = 'Next player ' + (this.state.xIsNext ? 'X' : 'O');
+        }
   
-      return (
-        <div>
-          <div className="status">{status}</div>
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div>
-        </div>
-      );
+        return (
+            <div>
+                <div className="status">{status}</div>
+                <div className="board-row">
+                {this.renderSquare(0)}
+                {this.renderSquare(1)}
+                {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                {this.renderSquare(3)}
+                {this.renderSquare(4)}
+                {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                {this.renderSquare(6)}
+                {this.renderSquare(7)}
+                {this.renderSquare(8)}
+                </div>
+            </div>
+        );
     }
-  }
+}
   
-  class Game extends React.Component {
+class Game extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            history: [{ squares: Array(9).fill(null), }],
+            xIsNext: true,
+        };
+    }
     render() {
-      return (
+        return (
         <div className="game">
-          <div className="game-board">
+            <div className="game-board">
             <Board />
-          </div>
-          <div className="game-info">
+            </div>
+            <div className="game-info">
             <div>{/* status */}</div>
             <ol>{/* TODO */}</ol>
-          </div>
+            </div>
         </div>
-      );
+        );
     }
-  }
+}   
 
-  function calculateWinner(squares) {
+function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -109,10 +116,10 @@ function Square(props) {
         }
     }
     return null;
-  }
+}
   
   // ========================================
   
-  const root = ReactDOM.createRoot(document.getElementById("root"));
-  root.render(<Game />);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Game />);
   
