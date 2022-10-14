@@ -89,7 +89,8 @@ class Game extends React.Component {
 
     render() {
         const history = this.state.history;
-        const current = history[this.state.stepNumber];
+        const curStep = this.state.stepNumber
+        const current = history[curStep];
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, moveIndex) => {
@@ -98,11 +99,20 @@ class Game extends React.Component {
             const desc = moveIndex ?
                 'Go to move #' + moveIndex + ' at [' + moveCol + ']' + '['  + moveRow +']':
                 'Go to game start';
-            return (
-                <li key={moveIndex}>
-                    <button onClick={() => this.jumpTo(moveIndex)}>{desc}</button>
-                </li>
-            );
+            if (moveIndex != curStep) {
+                return (
+                    <li key={moveIndex}>
+                        <button onClick={() => this.jumpTo(moveIndex)}>{desc}</button>
+                    </li>
+                );
+            }
+            else {
+                return (
+                    <li key={moveIndex}>
+                        <button onClick={() => this.jumpTo(moveIndex)}><b>{desc}</b></button>
+                    </li>
+                );
+            }  
         })
 
         let status;
